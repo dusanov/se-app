@@ -4,6 +4,7 @@
 # "bundle" and "npm" needs to be translated into Semaphore-specific
 # configuration.
 
+# use the image you created in se-base-image 
 run_all_jobs_in_docker_image: your-username/your-base-image:version
 
 setup_before_all_jobs:
