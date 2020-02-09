@@ -6,7 +6,7 @@ agent:
 
   containers:
     - name: main
-      image: dusanov/se-base-image
+      image: dusanov/se-base-image:61101e92-5685-4abc-b9ad-14343445ae68
 
 blocks:
   - name: "Build"
