@@ -39,12 +39,13 @@ blocks:
 
   - name: "ruby tests"
     dependencies: ["build dependencies"]
-    jobs:
-      - name: unit tests
-        commands:
-          - echo "running ruby unit tests"
-          - sleep 2
-      - name: integration tests
-        commands:
-          - echo "running ruby integration tests"
-          - sleep 5
+    task:
+      jobs:
+        - name: unit tests
+          commands:
+            - echo "running ruby unit tests"
+            - sleep 2
+        - name: integration tests
+          commands:
+            - echo "running ruby integration tests"
+            - sleep 5
