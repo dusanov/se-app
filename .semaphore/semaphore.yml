@@ -17,3 +17,22 @@ blocks:
           commands:
             - checkout
             - cache restore
+
+  - name: "build dependencies"
+    dependencies: []
+    task:
+      prologue:
+        commands:
+          - checkout
+          - cache restore
+      epilogue:
+        commands:
+          - cache store
+
+      jobs:
+        - name: ruby deps
+          commands:
+            - bundle install --path vendor/bundle
+        - name: node deps
+          commands:
+            - npm install
