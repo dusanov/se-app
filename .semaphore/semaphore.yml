@@ -40,8 +40,9 @@ blocks:
 #          - checkout
 #          - cache restore
       epilogue:
-        commands:
-          - cache store
+        on_pass:
+          commands:
+            - cache store
 
       jobs:
         - name: ruby deps
