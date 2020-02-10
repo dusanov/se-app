@@ -11,11 +11,10 @@ blocks:
     task:
       jobs:
         commands:
-        # get website content from artifact store
-        - artifact pull workflow website
-        - grep "Hello" website/*
-        - echo "uploading website..."
-        - sleep 4
+          - artifact pull workflow website
+          - grep "Hello" website/*
+          - echo "uploading website..."
+          - sleep 4
 
   - name: sanity check website
     task:

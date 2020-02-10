@@ -13,14 +13,14 @@ auto_cancel:
     when: "true"
 
 blocks:
-  - name: Setup
-    dependencies: []
-    task:
-      jobs:
-        - name: cache_restore
-          commands:
-            - checkout
-            - cache restore
+  #  - name: Setup
+  #    dependencies: []
+  #    task:
+  #      jobs:
+  #        - name: cache_restore
+  #          commands:
+  #            - checkout
+  #            - cache restore
 
   - name: "build dependencies"
     dependencies: []
@@ -64,7 +64,7 @@ blocks:
             - sleep 3
 
   - name: build website
-    dependencies: ["nodejs tests","ruby tests"]
+    dependencies: ["nodejs tests", "ruby tests"]
     task:
       jobs:
         - name: build website
@@ -79,6 +79,3 @@ promotions:
     pipeline_file: deploy-website.yml
     auto_promote_on:
       - result: passed
-
-
-
