@@ -13,22 +13,22 @@ auto_cancel:
     when: "true"
 
 blocks:
-  #  - name: Setup
-  #    dependencies: []
-  #    task:
-  #      jobs:
-  #        - name: cache_restore
-  #          commands:
-  #            - checkout
-  #            - cache restore
+  - name: Setup
+    dependencies: []
+    task:
+      jobs:
+        - name: checkout and restore cache
+          commands:
+            - checkout
+            - cache restore
 
   - name: "build dependencies"
     dependencies: []
     task:
-      prologue:
-        commands:
-          - checkout
-          - cache restore
+#      prologue:
+#        commands:
+#          - checkout
+#          - cache restore
       epilogue:
         commands:
           - cache store
@@ -41,7 +41,7 @@ blocks:
           commands:
             - npm install
 
-  - name: "ruby tests"
+  - name: "tests"
     dependencies: ["build dependencies"]
     task:
       jobs:
@@ -54,17 +54,17 @@ blocks:
             - echo "running ruby integration tests"
             - sleep 5
 
-  - name: "nodejs tests"
-    dependencies: ["build dependencies"]
-    task:
-      jobs:
+#  - name: "nodejs tests"
+#    dependencies: ["build dependencies"]
+#    task:
+#      jobs:
         - name: nodejs unit tests
           commands:
             - echo "running nodejs tests"
             - sleep 3
 
   - name: build website
-    dependencies: ["nodejs tests", "ruby tests"]
+    dependencies: ["tests"]
     task:
       jobs:
         - name: build website
