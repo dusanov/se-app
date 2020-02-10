@@ -6,16 +6,9 @@ agent:
 
   containers:
     - name: main
-      # todo: put latest base image tag as env variable: LATEST_BASE_IMAGE_TAG
       image: dusanov/se-base-image:latest  # $LATEST_BASE_IMAGE_TAG
 
-      # auto_cancel:
-      # running:
-      # when: "true"
-
 blocks:
-  # not sure if this is needed
-  # since there is a prologue in block "build dependencies"
   - name: Setup
     dependencies: []
     task:
@@ -32,15 +25,16 @@ blocks:
         commands:
           - checkout
           - cache restore
+      prologue:
+        commands:
+          - cache store
       jobs:
         - name: ruby deps
           commands:
             - bundle install --path vendor/bundle
-            - cache store
         - name: node deps
           commands:
             - npm install
-            - cache store
 
   - name: ruby tests
     dependencies: ["build dependencies"]
@@ -63,10 +57,9 @@ blocks:
   - name: build website
     dependencies: ["nodejs tests"]
     commands:
-      - cache restore  # nodejs
+      - cache restore
       - mkdir website
       - echo "<h1>Hello</h1>" >> website/index.html
-      # store website/ directory as artifact
       - artifact push workflow website
 
 promotions:
