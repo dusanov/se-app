@@ -12,6 +12,15 @@ auto_cancel:
   running:
     when: "true"
 
+global_job_config:
+  prologue:
+    commands:
+      - checkout
+      - cache restore
+  env_vars:
+    - name: TEST_ENV_VAR
+      value: test_value
+
 blocks:
 #  - name: Setup
 #    dependencies: []
@@ -26,10 +35,10 @@ blocks:
 #    dependencies: ["Setup"]
     dependencies: []
     task:
-      prologue:
-        commands:
-          - checkout
-          - cache restore
+#      prologue:
+#        commands:
+#          - checkout
+#          - cache restore
       epilogue:
         commands:
           - cache store
@@ -62,8 +71,8 @@ blocks:
         - name: nodejs unit tests
           commands:
             - echo "running nodejs tests"
-            - checkout
-            - cache restore
+#            - checkout
+#            - cache restore
             - npm test
             - sleep 3
 
@@ -73,7 +82,7 @@ blocks:
       jobs:
         - name: build website
           commands:
-            - cache restore
+#            - cache restore
             - mkdir website
             - echo "<h1>Hello</h1>" >> website/index.html
             - tar -zcvf website.tar.gz website/
