@@ -8,14 +8,18 @@ agent:
 blocks:
   - name: upload website
     manual: true
-    commands:
-      # get website content from artifact store
-      - artifact push workflow website
-      - grep "Hello" website/*
-      - echo "uploading website..."
-      - sleep 4
+    task:
+      jobs:
+        commands:
+        # get website content from artifact store
+        - artifact pull workflow website
+        - grep "Hello" website/*
+        - echo "uploading website..."
+        - sleep 4
 
   - name: sanity check website
-    commands:
-      - echo "sanity checking website"
-      - sleep 2
+    task:
+      jobs:
+        commands:
+          - echo "sanity checking website"
+          - sleep 2
