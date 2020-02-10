@@ -27,7 +27,7 @@ blocks:
     task:
       prologue:
         commands:
-#          - checkout
+          - checkout
           - cache restore
       epilogue:
         commands:
