@@ -9,9 +9,9 @@ agent:
       # todo: put latest base image tag as env variable: LATEST_BASE_IMAGE_TAG
       image: dusanov/se-base-image:latest  # $LATEST_BASE_IMAGE_TAG
 
-auto_cancel:
-  running:
-    when: "true"
+      # auto_cancel:
+      # running:
+      # when: "true"
 
 blocks:
   # not sure if this is needed
