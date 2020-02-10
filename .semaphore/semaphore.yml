@@ -45,11 +45,11 @@ blocks:
     dependencies: ["build dependencies"]
     task:
       jobs:
-        - name: unit tests
+        - name: ruby unit tests
           commands:
             - echo "running ruby unit tests"
             - sleep 2
-        - name: integration tests
+        - name: ruby integration tests
           commands:
             - echo "running ruby integration tests"
             - sleep 5
@@ -58,11 +58,27 @@ blocks:
     dependencies: ["build dependencies"]
     task:
       jobs:
-        commands:
-          - echo "running nodejs tests"
-          - sleep 3
+        - name: nodejs unit tests
+          commands:
+            - echo "running nodejs tests"
+            - sleep 3
 
+  - name: build website
+    dependencies: ["nodejs tests"]
+    task:
+      jobs:
+        - name: build website
+          commands:
+            - cache restore
+            - mkdir website
+            - echo "<h1>Hello</h1>" >> website/index.html
+            - artifact push workflow website
 
+promotions:
+  - name: Upload website
+    pipeline_file: deploy-website.yml
+    auto_promote_on:
+      - result: passed
 
 
 
