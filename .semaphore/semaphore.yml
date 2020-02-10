@@ -37,7 +37,7 @@ blocks:
           commands:
             - npm install
 
-  - name: ruby tests
+  - name: "ruby tests"
     dependencies: ["build dependencies"]
     jobs:
       - name: unit tests
@@ -55,7 +55,7 @@ blocks:
       - echo "running nodejs tests"
       - sleep 3
 
-  - name: build website
+  - name: "build website"
     dependencies: ["nodejs tests"]
     commands:
       - cache restore
