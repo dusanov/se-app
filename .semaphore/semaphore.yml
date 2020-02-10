@@ -62,21 +62,6 @@ blocks:
           - echo "running nodejs tests"
           - sleep 3
 
-  - name: build website
-    dependencies: ["nodejs tests"]
-    task:
-      jobs:
-        commands:
-          - cache restore
-          - mkdir website
-          - echo "<h1>Hello</h1>" >> website/index.html
-          - artifact push workflow website
-
-promotions:
-  - name: Upload website
-    pipeline_file: deploy-website.yml
-    auto_promote_on: 
-      - result: passed
 
 
 
