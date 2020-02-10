@@ -13,17 +13,17 @@ auto_cancel:
     when: "true"
 
 blocks:
-  - name: Setup
-    dependencies: []
-    task:
-      jobs:
-        - name: checkout and restore cache
-          commands:
-            - checkout
-            - cache restore
+#  - name: Setup
+#    dependencies: []
+#    task:
+#      jobs:
+#        - name: checkout and restore cache
+#          commands:
+#            - checkout
+#            - cache restore
 
   - name: "build dependencies"
-    dependencies: ["Setup"]
+#    dependencies: ["Setup"]
     task:
       prologue:
         commands:
