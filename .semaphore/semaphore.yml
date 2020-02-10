@@ -41,7 +41,7 @@ blocks:
           commands:
             - npm install
 
-  - name: "tests"
+  - name: "ruby tests"
     dependencies: ["build dependencies"]
     task:
       jobs:
@@ -54,10 +54,10 @@ blocks:
             - echo "running ruby integration tests"
             - sleep 5
 
-#  - name: "nodejs tests"
-#    dependencies: ["build dependencies"]
-#    task:
-#      jobs:
+  - name: "nodejs tests"
+    dependencies: ["build dependencies"]
+    task:
+      jobs:
         - name: nodejs unit tests
           commands:
             - echo "running nodejs tests"
@@ -67,7 +67,7 @@ blocks:
             - sleep 3
 
   - name: build website
-    dependencies: ["tests"]
+    dependencies: ["nodejs tests"]
     task:
       jobs:
         - name: build website
