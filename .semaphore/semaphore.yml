@@ -24,6 +24,7 @@ blocks:
 
   - name: "build dependencies"
 #    dependencies: ["Setup"]
+    dependencies: []
     task:
       prologue:
         commands:
