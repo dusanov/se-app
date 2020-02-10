@@ -11,10 +11,10 @@ agent:
 
 global_job_config:
   # prologue:
-  commands:
+  # commands:
     # - checkout
     # - cache restore
-    - cache list
+    # - cache list
   env_vars:
     - name: TEST_ENV_VAR
       value: test_value
