@@ -64,7 +64,7 @@ blocks:
             - sleep 3
 
   - name: build website
-    dependencies: ["nodejs tests"]
+    dependencies: ["nodejs tests","ruby tests"]
     task:
       jobs:
         - name: build website
