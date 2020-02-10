@@ -25,10 +25,10 @@ blocks:
   - name: "build dependencies"
     dependencies: ["Setup"]
     task:
-#      prologue:
-#        commands:
+      prologue:
+        commands:
 #          - checkout
-#          - cache restore
+          - cache restore
       epilogue:
         commands:
           - cache store
