@@ -7,7 +7,6 @@ agent:
 
 blocks:
   - name: upload website
-    manual: true
     task:
       jobs:
         - name: upload website

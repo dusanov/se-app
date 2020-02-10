@@ -77,5 +77,5 @@ blocks:
 promotions:
   - name: Upload website
     pipeline_file: deploy-website.yml
-    auto_promote_on:
-      - result: passed
+    #   auto_promote_on:
+    #      - result: passed
