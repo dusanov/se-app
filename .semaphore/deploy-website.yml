@@ -10,15 +10,17 @@ blocks:
     manual: true
     task:
       jobs:
-        commands:
-          - artifact pull workflow website
-          - grep "Hello" website/*
-          - echo "uploading website..."
-          - sleep 4
+        - name: upload website
+          commands:
+            - artifact pull workflow website
+            - grep "Hello" website/*
+            - echo "uploading website..."
+            - sleep 4
 
   - name: sanity check website
     task:
       jobs:
-        commands:
-          - echo "sanity checking website"
-          - sleep 2
+        - name: sanity check website
+          commands:
+            - echo "sanity checking website"
+            - sleep 2
