@@ -6,61 +6,81 @@ agent:
 
   containers:
     - name: main
-      image: dusanov/se-base-image
+      # todo: put latest base image tag as env variable: LATEST_BASE_IMAGE_TAG
+      image: dusanov/se-base-image:latest  # $LATEST_BASE_IMAGE_TAG
+
+global_job_config:
+  # prologue:
+  commands:
+    # - checkout
+    # - cache restore
+    - cache list
+  env_vars:
+    - name: TEST_ENV_VAR
+      value: test_value
+
+auto_cancel:
+  running:
+    when: "true"
 
 blocks:
-  - name: "Build"
-    task:
-      env_vars:
-        - name: APP_ENV
-          value: prod
-      jobs:
-      - name: Docker build
-        commands:
-          - checkout
-          - ls -1
-          - echo $APP_ENV
-          - echo "Docker build..."
-          - echo "done"
-
-  - name: "Smoke tests"
+  # not sure if this is needed
+  # since there is a prologue in block "build dependencies"
+  - name: Setup
+    dependencies: []
     task:
       jobs:
-      - name: Smoke
-        commands:
-          - checkout
-          - echo "make smoke"
+        - name: cache_restore
+          commands:
+            - checkout
+            - cache restore
 
-  - name: "Unit tests"
+  - name: "build dependencies"
+    dependencies: []
     task:
+      prologue:
+        commands:
+          - checkout
+          - cache restore
       jobs:
-      - name: RSpec
-        commands:
-          - checkout
-          - echo "make rspec"
+        - name: ruby deps
+          commands:
+            - bundle install --path vendor/bundle
+            - cache store
+        - name: node deps
+          commands:
+            - npm install
+            - cache store
 
-      - name: Lint code
+  - name: ruby tests
+    dependencies: ["build dependencies"]
+    jobs:
+      - name: unit tests
         commands:
-          - checkout
-          - echo "make lint"
+          - echo "running ruby unit tests"
+          - sleep 2
+      - name: integration tests
+        commands:
+          - echo "running ruby integration tests"
+          - sleep 5
 
-      - name: Check security
-        commands:
-          - checkout
-          - echo "make security"
+  - name: "nodejs tests"
+    dependencies: ["build dependencies"]
+    commands:
+      - echo "running nodejs tests"
+      - sleep 3
 
-  - name: "Integration tests"
-    task:
-      jobs:
-      - name: Cucumber
-        commands:
-          - checkout
-          - echo "make cucumber"
+  - name: build website
+    dependencies: ["nodejs tests"]
+    commands:
+      - cache restore  # nodejs
+      - mkdir website
+      - echo "<h1>Hello</h1>" >> website/index.html
+      # store website/ directory as artifact
+      - artifact push workflow website
 
-  - name: "Push Image"
-    task:
-      jobs:
-      - name: Push
-        commands:
-          - checkout
-          - echo "make docker.push"
+promotions:
+  - name: Upload website
+    pipeline_file: deploy-website.yml
+    auto_promote_on:
+      - result: passed

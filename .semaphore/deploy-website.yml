@@ -1,0 +1,21 @@
+version: v1.0
+name: Upload website pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: upload website
+    manual: true
+    commands:
+      # get website content from artifact store
+      - artifact push workflow website
+      - grep "Hello" website/*
+      - echo "uploading website..."
+      - sleep 4
+
+  - name: sanity check website
+    commands:
+      - echo "sanity checking website"
+      - sleep 2
