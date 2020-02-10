@@ -11,7 +11,8 @@ blocks:
       jobs:
         - name: upload website
           commands:
-            - artifact pull workflow website
+            - artifact pull workflow website.tar.gz
+            - tar -zxvf website.tar.gz
             - grep "Hello" website/*
             - echo "uploading website..."
             - sleep 4

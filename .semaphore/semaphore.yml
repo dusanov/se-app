@@ -72,7 +72,8 @@ blocks:
             - cache restore
             - mkdir website
             - echo "<h1>Hello</h1>" >> website/index.html
-            - artifact push workflow website
+            - tar -zcvf website.tar.gz website/
+            - artifact push workflow website.tar.gz
 
 promotions:
   - name: Upload website
