@@ -51,15 +51,17 @@ blocks:
 
   - name: "nodejs tests"
     dependencies: ["build dependencies"]
-    commands:
-      - echo "running nodejs tests"
-      - sleep 3
+    jobs:
+      commands:
+        - echo "running nodejs tests"
+        - sleep 3
 
   - name: "build website"
     dependencies: ["nodejs tests"]
-    commands:
-      - cache restore
-      - mkdir website
-      - echo "<h1>Hello</h1>" >> website/index.html
-      - artifact push workflow website
+    jobs:
+      commands:
+        - cache restore
+        - mkdir website
+        - echo "<h1>Hello</h1>" >> website/index.html
+        - artifact push workflow website
 
