@@ -20,16 +20,16 @@ blocks:
       prologue:
         commands:
           - checkout
-          - cache restore node_modules
-          - cache restore vendor/bundle
 
       jobs:
         - name: ruby deps
           commands:
+            - cache restore vendor/bundle
             - bundle install --path vendor/bundle
             - cache store vendor/bundle
         - name: node deps
           commands:
+            - cache restore node_modules
             - npm install
             - cache store node_modules
 
