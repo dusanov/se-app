@@ -24,14 +24,14 @@ blocks:
       jobs:
         - name: ruby deps
           commands:
-            - cache restore vendor/bundle
+            - cache restore ruby_bundle  #  vendor/bundle
             - bundle install --path vendor/bundle
-            - cache store vendor/bundle
+            - cache store ruby_bundle vendor/bundle
         - name: node deps
           commands:
-            - cache restore node_modules
+            - cache restore node_bundle  #  node_modules
             - npm install
-            - cache store node_modules
+            - cache store node_bundle node_modules
 
   - name: "ruby tests"
     dependencies: ["build dependencies"]
@@ -77,4 +77,3 @@ promotions:
       when: "result = 'passed' and (branch = 'development' or tag =~ '^v\.')"
   - name: Go Live
     pipeline_file: go-live.yml
-    #  when: "branch = 'master'"    

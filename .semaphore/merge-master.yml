@@ -13,6 +13,7 @@ blocks:
       jobs:
         - name: merge
           commands:
+            - checkout
             - git checkout master
             - git merge development
             - git push origin master
