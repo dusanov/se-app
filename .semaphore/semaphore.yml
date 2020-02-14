@@ -6,7 +6,7 @@ agent:
 
   containers:
     - name: main
-      image: dusanov/se-base-image:32f8581d-c267-4913-9b93-94b760a3e100  # latest can be used also
+      image: dusanov/se-base-image:32f8581d-c267-4913-9b93-94b760a3e100  # latest can also be used
 
 auto_cancel:
   running:
