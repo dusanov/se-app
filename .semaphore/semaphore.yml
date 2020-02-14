@@ -24,14 +24,14 @@ blocks:
       jobs:
         - name: ruby deps
           commands:
-            - cache restore ruby_bundle  #  vendor/bundle
+            - cache restore ruby_bundle-$(checksum Gemfile.lock)  #  vendor/bundle
             - bundle install --path vendor/bundle
-            - cache store ruby_bundle vendor/bundle
+            - cache store ruby_bundle-$(checksum Gemfile.lock) vendor/bundle
         - name: node deps
           commands:
-            - cache restore node_bundle  #  node_modules
+            - cache restore node_bundle-$(checksum package-lock.json)  #  node_modules
             - npm install
-            - cache store node_bundle node_modules
+            - cache store node_bundle-$(checksum package-lock.json) node_modules
 
   - name: "ruby tests"
     dependencies: ["build dependencies"]
@@ -54,7 +54,7 @@ blocks:
           commands:
             - echo "running nodejs tests"
             - checkout
-            - cache restore node_modules
+            - cache restore node_bundle-$(checksum package-lock.json)  #  node_modules
             - npm test
             - sleep 3
 
@@ -64,7 +64,7 @@ blocks:
       jobs:
         - name: build website
           commands:
-            - cache restore node_modules
+            - cache restore node_bundle-$(checksum package-lock.json)  #  node_modules
             - mkdir website
             - echo "<h1>Hello</h1>" >> website/index.html
             - tar -zcvf website-$SEMAPHORE_WORKFLOW_ID.tar.gz website/
