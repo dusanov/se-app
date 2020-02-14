@@ -59,7 +59,7 @@ blocks:
             - sleep 3
 
   - name: build website
-    dependencies: ["nodejs tests"]
+    dependencies: ["nodejs tests", "ruby tests"]
     task:
       jobs:
         - name: build website
@@ -67,11 +67,14 @@ blocks:
             - cache restore node_modules
             - mkdir website
             - echo "<h1>Hello</h1>" >> website/index.html
-            - tar -zcvf website.tar.gz website/
-            - artifact push workflow website.tar.gz
+            - tar -zcvf website-$SEMAPHORE_WORKFLOW_ID.tar.gz website/
+            - artifact push workflow website-$SEMAPHORE_WORKFLOW_ID.tar.gz
 
 promotions:
-  - name: Upload website
-    pipeline_file: deploy-website.yml
-    #   auto_promote_on:
-    #      - result: passed
+  - name: Auto upload website to dev
+    pipeline_file: deploy-website-to-dev.yml
+    auto_promote_on:
+      when: "result = 'passed' and (branch = 'development' or tag =~ '^v\.')"
+  - name: Go Live
+    pipeline_file: go-live.yml
+    #  when: "branch = 'master'"    
