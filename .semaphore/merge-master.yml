@@ -8,7 +8,7 @@ agent:
 blocks:
   - name: merge master with dev
     run:
-      when: "branch = 'developmnet'"    
+      when: "branch = 'development'"    
     task:
       jobs:
         - name: merge
