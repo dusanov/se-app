@@ -1,0 +1,30 @@
+version: v1.0
+name: Auto upload website to dev
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: upload website
+    task:
+      jobs:
+        - name: upload website
+          commands:
+            - artifact pull workflow website-$SEMAPHORE_WORKFLOW_ID.tar.gz
+            - tar -zxvf website-$SEMAPHORE_WORKFLOW_ID.tar.gz
+            - grep "Hello" website/*
+            - echo "uploading website..."
+            - sleep 4
+
+  - name: sanity check website
+    task:
+      jobs:
+        - name: sanity check website
+          commands:
+            - echo "sanity checking website"
+            - sleep 2
+
+promotions:
+  - name: Merge with master
+    pipeline_file: merge-master.yml

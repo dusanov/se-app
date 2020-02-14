@@ -1,0 +1,19 @@
+version: v1.0
+name: merge master with development
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: merge master with dev
+    run:
+      when: "branch = 'developmnet'"    
+    task:
+      jobs:
+        - name: merge
+          commands:
+            - git checkout master
+            - git merge development
+            - git push origin master
+
