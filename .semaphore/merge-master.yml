@@ -14,7 +14,10 @@ blocks:
         - name: merge
           commands:
             - checkout
-            - git pull origin master
+            - git status
+            - git branch
+            - git fetch --all
+            - git branch
             - git checkout master
             - git merge development
             - git push origin master
