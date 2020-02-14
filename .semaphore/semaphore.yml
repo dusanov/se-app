@@ -12,45 +12,33 @@ auto_cancel:
   running:
     when: "true"
 
-global_job_config:
-  prologue:
-    commands:
-      - checkout
-      - cache restore
-  env_vars:
-    - name: TEST_ENV_VAR
-      value: test_value
+# global_job_config:
+#  prologue:
+#    commands:
+#      - checkout
+#      - cache restore
 
 blocks:
-#  - name: Setup
-#    dependencies: []
-#    task:
-#      jobs:
-#        - name: checkout and restore cache
-#          commands:
-#            - checkout
-#            - cache restore
 
   - name: "build dependencies"
-#    dependencies: ["Setup"]
     dependencies: []
     task:
-#      prologue:
-#        commands:
-#          - checkout
-#          - cache restore
-      epilogue:
-        on_pass:
-          commands:
-            - cache store
+      prologue:
+        commands:
+          - checkout
+          - cache restore
+#          - cache restore node_modules
+#          - cache restore vendor/bundle
 
       jobs:
         - name: ruby deps
           commands:
             - bundle install --path vendor/bundle
+            - cache store vendor/bundle
         - name: node deps
           commands:
             - npm install
+            - cache store node_modules
 
   - name: "ruby tests"
     dependencies: ["build dependencies"]
@@ -72,8 +60,8 @@ blocks:
         - name: nodejs unit tests
           commands:
             - echo "running nodejs tests"
-#            - checkout
-#            - cache restore
+            - checkout
+            - cache restore node_modules
             - npm test
             - sleep 3
 
@@ -83,7 +71,7 @@ blocks:
       jobs:
         - name: build website
           commands:
-#            - cache restore
+            - cache restore node_modules
             - mkdir website
             - echo "<h1>Hello</h1>" >> website/index.html
             - tar -zcvf website.tar.gz website/
