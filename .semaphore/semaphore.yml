@@ -12,12 +12,6 @@ auto_cancel:
   running:
     when: "true"
 
-# global_job_config:
-#  prologue:
-#    commands:
-#      - checkout
-#      - cache restore
-
 blocks:
 
   - name: "build dependencies"
@@ -26,9 +20,8 @@ blocks:
       prologue:
         commands:
           - checkout
-          - cache restore
-#          - cache restore node_modules
-#          - cache restore vendor/bundle
+          - cache restore node_modules
+          - cache restore vendor/bundle
 
       jobs:
         - name: ruby deps
