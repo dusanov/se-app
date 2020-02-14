@@ -16,9 +16,9 @@ blocks:
             - checkout
             - git status
             - git branch
-            - git fetch --all
+            - git pull origin master
             - git branch
-            - git checkout master
+            - git checkout master origin/master
             - git merge development
             - git push origin master
 
