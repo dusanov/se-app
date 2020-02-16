@@ -10,13 +10,19 @@ blocks:
     run:
       when: "branch = 'development'"    
     task:
+      secrets:
+        - name: se-app-merge
       jobs:
         - name: merge
           commands:
             - checkout
+            - git remote set-url --add se-app-origin git@se-app.github.com:dusanov/se-app.git
+            - mv se-app-merge-key.pem ~/.ssh
+            - sudo chmod 400 ~/.ssh/se-app-merge-key.pem
+            - echo -e "Host se-app.github.com\n\tIdentityFile ~/.ssh/se-app-merge-key.pem" >> ~/.ssh/config
             - git remote set-branches origin master
             - git fetch -v
             - git checkout master  #  origin/master
             - git merge development
-            - git push origin master
+            - git push se-app-origin master
 
