@@ -16,7 +16,7 @@ blocks:
         - name: merge
           commands:
             - checkout
-            - git remote set-url --add se-app-origin git@se-app.github.com:dusanov/se-app.git
+            - git remote add se-app-origin git@se-app.github.com:dusanov/se-app.git
             - mv se-app-merge-key.pem ~/.ssh
             - sudo chmod 400 ~/.ssh/se-app-merge-key.pem
             - echo -e "Host se-app.github.com\n\tIdentityFile ~/.ssh/se-app-merge-key.pem" >> ~/.ssh/config
