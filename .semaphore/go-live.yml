@@ -7,7 +7,7 @@ agent:
 blocks:
   - name: upload website
     run:
-      when: branch = 'master'
+      when: "branch = 'master'"
     task:
       jobs:
         - name: upload website

@@ -70,6 +70,6 @@ promotions:
   - name: Auto upload website to dev
     pipeline_file: deploy-website-to-dev.yml
     auto_promote:
-      when: result = 'passed' and (branch = 'development' or tag =~ '^v\.')
+      when: "result = 'passed' and (branch = 'development' or tag =~ '^v\.')"
   - name: Go Live
     pipeline_file: go-live.yml

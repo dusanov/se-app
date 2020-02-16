@@ -7,7 +7,7 @@ agent:
 blocks:
   - name: merge master with dev
     run:
-      when: branch = 'development'
+      when: "branch = 'development'"
     task:
       secrets:
         - name: se-app-merge
