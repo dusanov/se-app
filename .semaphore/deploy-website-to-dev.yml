@@ -4,7 +4,6 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
-
 blocks:
   - name: upload website
     task:
@@ -16,7 +15,6 @@ blocks:
             - grep "Hello" website/*
             - echo "uploading website..."
             - sleep 4
-
   - name: sanity check website
     task:
       jobs:
@@ -24,7 +22,6 @@ blocks:
           commands:
             - echo "sanity checking website"
             - sleep 2
-
 promotions:
   - name: Merge with master
     pipeline_file: merge-master.yml

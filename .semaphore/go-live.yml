@@ -4,11 +4,10 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
-
 blocks:
   - name: upload website
     run:
-      when: "branch = 'master'"    
+      when: branch = 'master'
     task:
       jobs:
         - name: upload website
@@ -18,10 +17,9 @@ blocks:
             - grep "Hello" website/*
             - echo "uploading website..."
             - sleep 4
-
   - name: sanity check website
     run:
-      when: "branch = 'master'"    
+      when: branch = 'master'
     task:
       jobs:
         - name: sanity check website

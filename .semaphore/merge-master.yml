@@ -4,11 +4,10 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
-
 blocks:
   - name: merge master with dev
     run:
-      when: "branch = 'development'"    
+      when: branch = 'development'
     task:
       secrets:
         - name: se-app-merge
@@ -16,13 +15,17 @@ blocks:
         - name: merge
           commands:
             - checkout
+            - >-
+              git remote add se-app-origin
+              git@se-app.github.com:dusanov/se-app.git
+            - mv se-app-merge-key.pem ~/.ssh
+            - sudo chmod 400 ~/.ssh/se-app-merge-key.pem
+            - >-
+              echo -e "Host se-app.github.com\n\tHostname
+              github.com\n\tIdentityFile ~/.ssh/se-app-merge-key.pem" >>
+              ~/.ssh/config
             - git remote set-branches origin master
             - git fetch -v
-            - git remote add se-app-origin git@se-app.github.com:dusanov/se-app.git
-            - mv ~/se-app-merge-key.pem ~/.ssh/
-            - sudo chmod 400 ~/.ssh/se-app-merge-key.pem
-            - echo -e "Host se-app.github.com\n\tHostname github.com\n\tIdentityFile ~/.ssh/se-app-merge-key.pem" >> ~/.ssh/config
-            - git checkout master  #  origin/master
+            - git checkout master
             - git merge development
             - git push se-app-origin master
-

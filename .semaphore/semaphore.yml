@@ -3,38 +3,34 @@ name: Rewriting pipeline from meta.yml
 agent:
   machine:
     type: e1-standard-2
-
+    os_image: ubuntu1804
   containers:
     - name: main
-      image: dusanov/se-base-image:32f8581d-c267-4913-9b93-94b760a3e100  # latest can also be used
-
+      image: 'dusanov/se-base-image:32f8581d-c267-4913-9b93-94b760a3e100'
 auto_cancel:
   running:
-    when: "true"
-
+    when: 'true'
 blocks:
-
-  - name: "build dependencies"
+  - name: build dependencies
     dependencies: []
     task:
       prologue:
         commands:
           - checkout
-
       jobs:
         - name: ruby deps
           commands:
-            - cache restore ruby_bundle-$(checksum Gemfile.lock)  #  vendor/bundle
+            - cache restore ruby_bundle-$(checksum Gemfile.lock)
             - bundle install --path vendor/bundle
             - cache store ruby_bundle-$(checksum Gemfile.lock) vendor/bundle
         - name: node deps
           commands:
-            - cache restore node_bundle-$(checksum package-lock.json)  #  node_modules
+            - cache restore node_bundle-$(checksum package-lock.json)
             - npm install
             - cache store node_bundle-$(checksum package-lock.json) node_modules
-
-  - name: "ruby tests"
-    dependencies: ["build dependencies"]
+  - name: ruby tests
+    dependencies:
+      - build dependencies
     task:
       jobs:
         - name: ruby unit tests
@@ -45,35 +41,35 @@ blocks:
           commands:
             - echo "running ruby integration tests"
             - sleep 5
-
-  - name: "nodejs tests"
-    dependencies: ["build dependencies"]
+  - name: nodejs tests
+    dependencies:
+      - build dependencies
     task:
       jobs:
         - name: nodejs unit tests
           commands:
             - echo "running nodejs tests"
             - checkout
-            - cache restore node_bundle-$(checksum package-lock.json)  #  node_modules
+            - cache restore node_bundle-$(checksum package-lock.json)
             - npm test
             - sleep 3
-
   - name: build website
-    dependencies: ["nodejs tests", "ruby tests"]
+    dependencies:
+      - nodejs tests
+      - ruby tests
     task:
       jobs:
         - name: build website
           commands:
-            - cache restore node_bundle-$(checksum package-lock.json)  #  node_modules
+            - cache restore node_bundle-$(checksum package-lock.json)
             - mkdir website
             - echo "<h1>Hello</h1>" >> website/index.html
             - tar -zcvf website-$SEMAPHORE_WORKFLOW_ID.tar.gz website/
             - artifact push workflow website-$SEMAPHORE_WORKFLOW_ID.tar.gz
-
 promotions:
   - name: Auto upload website to dev
     pipeline_file: deploy-website-to-dev.yml
     auto_promote:
-      when: "result = 'passed' and (branch = 'development' or tag =~ '^v\.')"
+      when: result = 'passed' and (branch = 'development'
   - name: Go Live
     pipeline_file: go-live.yml
