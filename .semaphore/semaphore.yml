@@ -1,7 +1,7 @@
 version: v1.0
 name: Rewriting pipeline from meta.yml
 agent:
-  machine:
+    machine:
     type: e1-standard-2
     os_image: ubuntu1804
 #  containers:
@@ -12,7 +12,7 @@ auto_cancel:
     when: 'true'
 blocks:
   - name: build dependencies
-#    dependencies: []
+    dependencies: []
     task:
       prologue:
         commands:
@@ -23,27 +23,27 @@ blocks:
             - cache restore ruby_bundle-$(checksum Gemfile.lock)-$SEMAPHORE_GIT_BRANCH
             - bundle install --path vendor/bundle
             - cache store ruby_bundle-$(checksum Gemfile.lock)-$SEMAPHORE_GIT_BRANCH vendor/bundle
-#        - name: node deps
-#          commands:
+        - name: node deps
+          commands:
             - cache restore node_bundle-$(checksum package-lock.json)-$SEMAPHORE_GIT_BRANCH
             - npm install
             - cache store node_bundle-$(checksum package-lock.json)-$SEMAPHORE_GIT_BRANCH node_modules
   - name: ruby tests
-#    dependencies:
-#      - build dependencies
+    dependencies:
+      - build dependencies
     task:
       jobs:
         - name: ruby unit tests
           commands:
             - echo "running ruby unit tests"
             - sleep 2
-#       - name: ruby integration tests
-#          commands:
+       - name: ruby integration tests
+          commands:
             - echo "running ruby integration tests"
             - sleep 5
   - name: nodejs tests
-#    dependencies:
-#      - build dependencies
+    dependencies:
+      - build dependencies
     task:
       jobs:
         - name: nodejs unit tests
@@ -54,9 +54,9 @@ blocks:
             - npm test
             - sleep 3
   - name: build website
-#    dependencies:
-#      - nodejs tests
-#      - ruby tests
+    dependencies:
+      - nodejs tests
+      - ruby tests
     task:
       jobs:
         - name: build website
