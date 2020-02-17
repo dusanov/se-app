@@ -6,12 +6,14 @@ agent:
     os_image: ubuntu1804
 blocks:
   - name: upload website
+    run:
+      when: "branch = 'development' or tag =~ '^v*\.'"
     task:
       jobs:
         - name: upload website
           commands:
-            - artifact pull workflow website-$SEMAPHORE_WORKFLOW_ID.tar.gz
-            - tar -zxvf website-$SEMAPHORE_WORKFLOW_ID.tar.gz
+            - artifact pull workflow website-$SEMAPHORE_WORKFLOW_ID-$SEMAPHORE_GIT_BRANCH.tar.gz
+            - tar -zxvf website-$SEMAPHORE_WORKFLOW_ID-$SEMAPHORE_GIT_BRANCH.tar.gz
             - grep "Hello" website/*
             - echo "uploading website..."
             - sleep 4

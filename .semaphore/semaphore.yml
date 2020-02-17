@@ -20,14 +20,14 @@ blocks:
       jobs:
         - name: ruby deps
           commands:
-            - cache restore ruby_bundle-$(checksum Gemfile.lock)
+            - cache restore ruby_bundle-$(checksum Gemfile.lock)-$SEMAPHORE_GIT_BRANCH
             - bundle install --path vendor/bundle
-            - cache store ruby_bundle-$(checksum Gemfile.lock) vendor/bundle
+            - cache store ruby_bundle-$(checksum Gemfile.lock)-$SEMAPHORE_GIT_BRANCH vendor/bundle
         - name: node deps
           commands:
-            - cache restore node_bundle-$(checksum package-lock.json)
+            - cache restore node_bundle-$(checksum package-lock.json)-$SEMAPHORE_GIT_BRANCH
             - npm install
-            - cache store node_bundle-$(checksum package-lock.json) node_modules
+            - cache store node_bundle-$(checksum package-lock.json)-$SEMAPHORE_GIT_BRANCH node_modules
   - name: ruby tests
     dependencies:
       - build dependencies
@@ -50,7 +50,7 @@ blocks:
           commands:
             - echo "running nodejs tests"
             - checkout
-            - cache restore node_bundle-$(checksum package-lock.json)
+            - cache restore node_bundle-$(checksum package-lock.json)-$SEMAPHORE_GIT_BRANCH
             - npm test
             - sleep 3
   - name: build website
@@ -61,11 +61,11 @@ blocks:
       jobs:
         - name: build website
           commands:
-            - cache restore node_bundle-$(checksum package-lock.json)
+            - cache restore node_bundle-$(checksum package-lock.json)-$SEMAPHORE_GIT_BRANCH
             - mkdir website
             - echo "<h1>Hello</h1>" >> website/index.html
-            - tar -zcvf website-$SEMAPHORE_WORKFLOW_ID.tar.gz website/
-            - artifact push workflow website-$SEMAPHORE_WORKFLOW_ID.tar.gz
+            - tar -zcvf website-$SEMAPHORE_WORKFLOW_ID-$SEMAPHORE_GIT_BRANCH.tar.gz website/
+            - artifact push workflow website-$SEMAPHORE_WORKFLOW_ID-$SEMAPHORE_GIT_BRANCH.tar.gz
 promotions:
   - name: Auto upload website to dev
     pipeline_file: deploy-website-to-dev.yml

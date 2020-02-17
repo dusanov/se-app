@@ -12,8 +12,8 @@ blocks:
       jobs:
         - name: upload website
           commands:
-            - artifact pull workflow website-$SEMAPHORE_WORKFLOW_ID.tar.gz
-            - tar -zxvf website-$SEMAPHORE_WORKFLOW_ID.tar.gz
+            - artifact pull workflow website-$SEMAPHORE_WORKFLOW_ID-$SEMAPHORE_GIT_BRANCH.tar.gz
+            - tar -zxvf website-$SEMAPHORE_WORKFLOW_ID-$SEMAPHORE_GIT_BRANCH.tar.gz
             - grep "Hello" website/*
             - echo "uploading website..."
             - sleep 4
