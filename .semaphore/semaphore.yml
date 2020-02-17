@@ -37,7 +37,7 @@ blocks:
           commands:
             - echo "running ruby unit tests"
             - sleep 2
-       - name: ruby integration tests
+        - name: ruby integration tests
           commands:
             - echo "running ruby integration tests"
             - sleep 5
