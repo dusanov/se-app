@@ -18,6 +18,8 @@ blocks:
             - echo "uploading website..."
             - sleep 4
   - name: sanity check website
+    run:
+      when: "branch = 'development' or tag =~ '^v*\.'"
     task:
       jobs:
         - name: sanity check website
